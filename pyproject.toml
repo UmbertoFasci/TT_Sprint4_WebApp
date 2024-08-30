@@ -13,6 +13,7 @@ plotly-express = "^0.4.1"
 altair = "^5.4.1"
 nbformat = "^5.10.4"
 thefuzz = "^0.22.1"
+rapidfuzz = "^3.9.6"
 
 
 [tool.poetry.group.dev.dependencies]
