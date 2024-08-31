@@ -12,8 +12,16 @@ vehicles = vehicles.dropna(subset=['model_year', 'cylinders'])
 # Fill NA paint_color
 vehicles['paint_color'] = vehicles['paint_color'].fillna('unknown')
 
-# Fill NA odomerter
-vehicles['odometer'] = vehicles['odometer'].fillna(vehicles['odometer'].median())
+# Fill NA odomerter FIXED
+
+# Calculate car age based on the 'model_year'
+vehicles['car_age'] = 2019 - vehicles['model_year']
+
+# Fill missing 'odometer' values with the median odometer of each car age group
+vehicles['odometer'] = vehicles.groupby('car_age')['odometer'].transform(lambda x: x.fillna(x.median()))
+
+# Drop remaining odometer NAs
+vehicles = vehicles.dropna(subset=['odometer']).reset_index(drop=True)
 
 # Fill NA is_4wd
 vehicles['is_4wd'] = vehicles['is_4wd'].fillna(0)
@@ -244,7 +252,7 @@ for axis in fig.layout:
 fig.update_xaxes(matches=None)  # Ensure x-axes are independent for each facet
 
 # Show the plot
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 st.write("""
          By removing the outlying data and visualizing the price ranges by decade.
